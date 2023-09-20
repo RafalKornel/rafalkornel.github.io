@@ -1,0 +1,19 @@
+---
+import PostLayout from "@/layout/PostLayout.astro";
+export const getStaticPaths = async () => {
+  const allPosts = await Astro.glob("../../../content/*.md");
+
+  return allPosts.map((post) => ({
+    params: { post: post.file.split("/").at(-1) },
+    props: {
+      post: post,
+    },
+  }));
+};
+
+const { post } = Astro.props;
+
+const { Content } = post;
+---
+
+<PostLayout frontmatter={post.frontmatter}><Content /></PostLayout>
