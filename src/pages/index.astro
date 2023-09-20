@@ -1,5 +1,12 @@
 ---
+import Counter from "@/components/Counter.svelte";
 import BaseLayout from "@/layout/BaseLayout.astro";
+import Form from "@/components/Form";
 ---
 
-<BaseLayout title="Home">Hello! This is index page</BaseLayout>
+<BaseLayout title="Home">
+  Hello! This is index page
+  <Counter client:load>
+    <Form client:load />
+  </Counter>
+</BaseLayout>
