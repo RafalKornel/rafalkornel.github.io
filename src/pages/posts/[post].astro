@@ -1,10 +1,13 @@
 ---
 import PostLayout from "@/layout/PostLayout.astro";
+import { getPosts } from "@/lib/posts";
+import type { CollectionEntry } from "astro:content";
+
 export const getStaticPaths = async () => {
-  const allPosts = await Astro.glob("../../../content/*.md");
+  const allPosts = await getPosts();
 
   return allPosts.map((post) => ({
-    params: { post: post.file.split("/").at(-1) },
+    params: { post: post.slug },
     props: {
       post: post,
     },
@@ -13,7 +16,11 @@ export const getStaticPaths = async () => {
 
 const { post } = Astro.props;
 
-const { Content } = post;
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+const { Content } = await post.render();
 ---
 
-<PostLayout frontmatter={post.frontmatter}><Content /></PostLayout>
+<PostLayout post={post}><Content /></PostLayout>

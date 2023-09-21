@@ -1,7 +1,8 @@
 ---
 import BaseLayout from "@/layout/BaseLayout.astro";
+import { getPostUrl, getPosts } from "@/lib/posts";
 
-const allPosts = await Astro.glob("../../content/*.md");
+const allPosts = await getPosts();
 const pageTitle = "My Astro Learning Blog";
 ---
 
@@ -11,9 +12,7 @@ const pageTitle = "My Astro Learning Blog";
     {
       allPosts.map((post) => (
         <li>
-          <a href={`/posts/${post.file.split("/").at(-1)}`}>
-            {post.frontmatter.title}
-          </a>
+          <a href={getPostUrl(post)}>{post.data.title}</a>
         </li>
       ))
     }
