@@ -1,0 +1,30 @@
+---
+import { Image } from "astro:assets";
+import avatarSmall from "./avatar-small-24.png";
+
+interface Props {
+  variant?: "hero" | "default";
+}
+
+const { variant = "default" } = Astro.props;
+
+const shouldShowLogo = variant === "default";
+---
+
+<header class="w-full h-16 flex justify-between align-middle py-4 px-6">
+  {
+    shouldShowLogo && (
+      <a href="/" class="flex align-middle gap-4 h-6">
+        <Image width={24} height={24} src={avatarSmall} alt="Avatar" />
+        <div class="my-auto text-lg leading-none text-accent font-bold">
+          Rafał Kornel
+        </div>
+      </a>
+    )
+  }
+  <nav class="flex align-middle gap-8">
+    <a href="/blog">Blog</a>
+    <a href="/projects">Projects</a>
+    <a href="/contact">Contact</a>
+  </nav>
+</header>
