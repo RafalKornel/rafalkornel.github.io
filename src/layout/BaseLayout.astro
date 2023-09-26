@@ -4,8 +4,6 @@ import Header from "../components/Header/Header.astro";
 interface Props {
   title?: string;
 }
-
-const { title } = Astro.props;
 ---
 
 <html lang="en">
@@ -18,7 +16,7 @@ const { title } = Astro.props;
   </head>
   <body class="h-screen">
     <main class="bg-main text-text h-full">
-      <Header />
+      <Header variant={Astro.url.pathname === "/" ? "hero" : "default"} />
       <slot />
     </main>
   </body>

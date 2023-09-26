@@ -11,7 +11,9 @@ const { variant = "default" } = Astro.props;
 const shouldShowLogo = variant === "default";
 ---
 
-<header class="w-full h-16 flex justify-between align-middle py-4 px-6">
+<header
+  class=`w-full h-16 flex align-middle py-4 px-6 ${shouldShowLogo ? "justify-between" : "justify-end"}`
+>
   {
     shouldShowLogo && (
       <a href="/" class="flex align-middle gap-4 h-6">
