@@ -29,7 +29,7 @@ const routes: Route[] = [
       <a href="/" class="flex align-middle gap-4 h-6">
         <Avatar variant="small" />
         <div class="my-auto text-lg leading-none text-accent font-bold">
-          Rafał Kornel
+          <span transition:name="name">Rafał Kornel</span>
         </div>
       </a>
     )
@@ -38,7 +38,10 @@ const routes: Route[] = [
     {
       routes.map((route) => (
         <a
-          class={Astro.url.pathname === route.href ? "text-accent" : ""}
+          class:list={[
+            Astro.url.pathname === route.href ? "text-accent" : "",
+            "leading-6",
+          ]}
           href={route.href}
         >
           {route.label}

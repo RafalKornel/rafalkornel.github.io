@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from "astro:transitions";
 import Header from "../components/Header/Header.astro";
 
 interface Props {
@@ -16,6 +17,8 @@ const { title, align = "middle" } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    <ViewTransitions fallback="none" />
   </head>
   <body
     class="flex md:flex-col flex-col-reverse place-items-center h-[calc(100dvh)] bg-main text-text"
@@ -28,6 +31,7 @@ const { title, align = "middle" } = Astro.props;
         align === "middle" ? "place-content-center" : "place-content-top",
         "max-w-full sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl",
       ]}
+      transition:animate="slide"
     >
       <slot />
     </main>

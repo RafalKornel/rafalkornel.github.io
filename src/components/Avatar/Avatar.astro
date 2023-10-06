@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import avatarImage from "./avatar.png";
+import { fade, slide } from "astro:transitions";
 
 interface Props {
   variant: "small" | "large";
@@ -19,5 +20,6 @@ const diameter = variant === "small" ? 24 : 264;
     class="rounded-full m-auto"
     src={avatarImage}
     alt="Rafał Kornel"
+    transition:name="avatar"
   />
 </div>
