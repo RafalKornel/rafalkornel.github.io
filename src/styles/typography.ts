@@ -4,7 +4,7 @@ export const createHeadingStyle: PluginCreator = ({ addBase, theme }) => {
   addBase({
     "h1, .heading": {
       fontFamily: theme("font.montserrat"),
-      fontSize: "3rem",
+      fontSize: "2.75rem",
       fontStyle: "normal",
       fontWeight: "700",
       lineHeight: "normal",

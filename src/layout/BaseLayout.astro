@@ -3,7 +3,10 @@ import Header from "../components/Header/Header.astro";
 
 interface Props {
   title?: string;
+  align?: "top" | "middle";
 }
+
+const { title, align = "middle" } = Astro.props;
 ---
 
 <html lang="en">
@@ -12,11 +15,20 @@ interface Props {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    <title>{title}</title>
   </head>
-  <body class="h-screen">
-    <main class="bg-main text-text h-full">
-      <Header variant={Astro.url.pathname === "/" ? "hero" : "default"} />
+  <body
+    class="flex md:flex-col flex-col-reverse place-items-center h-[calc(100dvh)] bg-main text-text"
+  >
+    <Header variant={Astro.url.pathname === "/" ? "hero" : "default"} />
+    <main
+      class:list={[
+        "w-full h-full",
+        "flex flex-col p-4",
+        align === "middle" ? "place-content-center" : "place-content-top",
+        "max-w-full sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl",
+      ]}
+    >
       <slot />
     </main>
   </body>

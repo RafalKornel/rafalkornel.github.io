@@ -4,17 +4,20 @@ import avatarImage from "./avatar.png";
 
 interface Props {
   variant: "small" | "large";
+  class?: string;
 }
 
-const { variant } = Astro.props;
+const { variant, class: className } = Astro.props;
 
 const diameter = variant === "small" ? 24 : 264;
 ---
 
-<Image
-  width={diameter}
-  height={diameter}
-  class="rounded-full"
-  src={avatarImage}
-  alt="Rafał Kornel"
-/>
+<div class:list={[className, "flex"]}>
+  <Image
+    width={diameter}
+    height={diameter}
+    class="rounded-full m-auto"
+    src={avatarImage}
+    alt="Rafał Kornel"
+  />
+</div>

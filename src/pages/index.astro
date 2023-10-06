@@ -3,20 +3,14 @@ import Avatar from "@/components/Avatar/Avatar.astro";
 import BaseLayout from "@/layout/BaseLayout.astro";
 ---
 
-<BaseLayout>
-  <section class="flex flex-col gap-4 p-4">
-    <Avatar variant="large" />
-    <h1>Heading</h1>
-    <h2>Heading 2</h2>
-    <h3>Sub heading</h3>
-    <h4>Sub heading 2</h4>
-    <h5>Sub heading 3</h5>
+<BaseLayout title="Rafał Kornel">
+  <div class="flex flex-col lg:flex-row gap-10 lg:gap-20 xl:px-60">
+    <Avatar variant="large" class="flex-[2]" />
 
-    <p>Regular</p>
-    <p class="text-medium">Regular medium</p>
-    <p class="text-s">Regular s</p>
-    <p class="text-xs">Regular xs</p>
-
-    <a>Link</a>
-  </section>
+    <section class="flex-[3] flex flex-col m-auto">
+      <p>Hello!</p>
+      <h2>I'm <span class="text-accent"> Rafał Kornel</span></h2>
+      <h2>and I build <span class="text-accent">Web</span> 🌍</h2>
+    </section>
+  </div>
 </BaseLayout>
