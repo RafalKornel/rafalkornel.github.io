@@ -1,6 +1,5 @@
 ---
-import { Image } from "astro:assets";
-import avatarSmall from "./avatar-small-24.png";
+import Avatar from "../Avatar/Avatar.astro";
 
 interface Props {
   variant?: "hero" | "default";
@@ -9,6 +8,17 @@ interface Props {
 const { variant = "default" } = Astro.props;
 
 const shouldShowLogo = variant === "default";
+
+type Route = {
+  label: string;
+  href: string;
+};
+
+const routes: Route[] = [
+  { label: "Blog", href: "/blog" },
+  { label: "Projects", href: "/projects" },
+  { label: "Contact", href: "/contact" },
+];
 ---
 
 <header
@@ -17,16 +27,23 @@ const shouldShowLogo = variant === "default";
   {
     shouldShowLogo && (
       <a href="/" class="flex align-middle gap-4 h-6">
-        <Image width={24} height={24} src={avatarSmall} alt="Avatar" />
+        <Avatar variant="small" />
         <div class="my-auto text-lg leading-none text-accent font-bold">
           Rafał Kornel
         </div>
       </a>
     )
   }
-  <nav class="flex align-middle gap-8">
-    <a href="/blog">Blog</a>
-    <a href="/projects">Projects</a>
-    <a href="/contact">Contact</a>
+  <nav class="flex align-middle md:gap-8 gap-4">
+    {
+      routes.map((route) => (
+        <a
+          class={Astro.url.pathname === route.href ? "text-accent" : ""}
+          href={route.href}
+        >
+          {route.label}
+        </a>
+      ))
+    }
   </nav>
 </header>
