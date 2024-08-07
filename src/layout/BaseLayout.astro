@@ -1,13 +1,19 @@
 ---
 import { ViewTransitions } from "astro:transitions";
-import Header from "../components/Header/Header.astro";
+import Header from "@/components/Header/Header.astro";
+import Background from "@/components/Background/Background.astro";
 
 interface Props {
   title?: string;
   align?: "top" | "middle";
+  withInteractiveBackground?: boolean;
 }
 
-const { title, align = "middle" } = Astro.props;
+const {
+  title,
+  align = "middle",
+  withInteractiveBackground = false,
+} = Astro.props;
 ---
 
 <html lang="en">
@@ -23,6 +29,7 @@ const { title, align = "middle" } = Astro.props;
   <body
     class="flex md:flex-col flex-col-reverse place-items-center h-[calc(100dvh)] bg-main text-text"
   >
+    {withInteractiveBackground && <Background />}
     <Header variant={Astro.url.pathname === "/" ? "hero" : "default"} />
     <main
       class:list={[

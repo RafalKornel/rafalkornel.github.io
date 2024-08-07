@@ -1,0 +1,97 @@
+---
+interface Props {}
+---
+
+<div>
+  <canvas id="background-canvas"></canvas>
+</div>
+
+<script>
+  function getRandomNumber(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  const canvas: HTMLCanvasElement =
+    document.querySelector("#background-canvas")!;
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const ctx = canvas.getContext("2d");
+
+  if (ctx) {
+    const clear = () =>
+      ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+    const drawCircle = (x: number, y: number, radius: number, fill: string) => {
+      ctx.beginPath();
+
+      ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+
+      if (fill) {
+        ctx.fillStyle = fill;
+        ctx.fill();
+      }
+    };
+
+    const mousePos = { x: 0, y: 0 };
+
+    document.addEventListener("mousemove", (e) => {
+      // clear();
+
+      // console.log(e.clientX, e.clientY);
+      // console.log(mousePos);
+
+      mousePos.x = e.clientX;
+      mousePos.y = e.clientY;
+    });
+
+    const circles = new Array(100)
+      .fill(0)
+      .map((_, i) => [
+        getRandomNumber(0, canvas.width),
+        getRandomNumber(0, canvas.height),
+      ]);
+
+    const draw = () => {
+      clear();
+
+      circles.forEach(([x, y]) => {
+        drawCircle(x, y, 5, "#fff");
+      });
+
+      console.log(mousePos);
+
+      drawCircle(mousePos.x, mousePos.y, 10, "#fff");
+    };
+
+    function loopWrapper(): number {
+      clear();
+
+      draw();
+
+      circles.forEach((circle) => {
+        circle[0] += getRandomNumber(-1, 1);
+        circle[1] += getRandomNumber(-1, 1);
+      });
+
+      return requestAnimationFrame(() => loopWrapper());
+    }
+
+    loopWrapper();
+  }
+</script>
+
+<style>
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    z-index: -1000;
+
+    background: #121212;
+  }
+</style>
