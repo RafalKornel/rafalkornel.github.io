@@ -1,0 +1,42 @@
+---
+import { isFeatureEnabled } from "@config";
+import Avatar from "./Avatar/Avatar.astro";
+import Socials from "./Socials.astro";
+---
+
+<div
+  class="relative w-full h-full flex items-center justify-center flex-col md:flex-row gap-4 md:gap-8"
+>
+  <Avatar variant="large" />
+
+  <div class="p-5 text-left">
+    <p class="animated text-sm md:text-base lg:text-lg">
+      <!-- <p class="animated text-lg md:text-xl lg:text-2xl font-semibold"> -->
+
+       Hello, I am ...
+    </p>
+    <p
+      class="animated text-2xl md:text-3xl lg:text-4xl font-bold uppercase text-black dark:text-white"
+    >
+      <span class="text-accent" transition:name="name">Rafał Kornel</span>
+    </p>
+    <p class="animated text-lg md:text-xl lg:text-2xl font-semibold">
+      <!-- <p class="animated text-sm md:text-base lg:text-lg"> -->
+       and I build <span class="text-accent">Web</span> 🌍
+    </p>
+
+    <div
+      id="ctaButtons"
+      class="animated flex flex-wrap gap-4 justify-center mt-5"
+    >
+      <a
+        href="/blog"
+        class="py-2 px-4 rounded truncate text-base bg-main dark:bg-accent text-white dark:text-black hover:opacity-75 blend"
+      >
+        Read my blog
+      </a>
+
+      <Socials />
+    </div>
+  </div>
+</div>

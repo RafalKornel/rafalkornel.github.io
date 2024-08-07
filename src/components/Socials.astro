@@ -1,0 +1,18 @@
+---
+import { SITE, SOCIALS } from "@config";
+---
+
+{
+  SOCIALS.map((SOCIAL) => (
+    <a
+      href={SOCIAL.HREF}
+      target="_blank"
+      aria-label={`${SITE.TITLE} on ${SOCIAL.NAME}`}
+      class="group size-10 rounded-full items-center justify-center hover:bg-main/5 dark:hover:bg-white/20  blend"
+    >
+      <svg class="size-full fill-current group-hover:fill-black group-hover:dark:fill-white blend">
+        <use href={`/social.svg#${SOCIAL.ICON}`} />
+      </svg>
+    </a>
+  ))
+}

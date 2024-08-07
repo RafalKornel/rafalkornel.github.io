@@ -1,0 +1,81 @@
+---
+import Badge from "./Badge.astro";
+import InterestCard from "./InterestCard.astro";
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <InterestCard
+    header="🎨 Frontend"
+    body="This is my main area of expertise. I express myself creating unique experiences"
+    badges={[
+      { text: "react", variant: "blue" },
+      { text: "angular", variant: "red" },
+      { text: "vue", variant: "green" },
+      { text: "redux", variant: "teal" },
+      { text: "svelte", variant: "amber" },
+    ]}
+  />
+
+  <InterestCard
+    header="🖥️ Backend"
+    body="Creating APIs rich in logic is not a problem for me. I especially enjoy using node.js."
+    badges={[
+      { text: "node.js", variant: "blue" },
+      { text: "nest.js", variant: "red" },
+      { text: ".NET / c#", variant: "green" },
+      { text: "python", variant: "amber" },
+      { text: "SQL databases", variant: "teal" },
+      { text: "docker", variant: "blue" },
+      { text: "algorithms", variant: "green" },
+      { text: "data structures", variant: "purple" },
+    ]}
+  />
+
+  <InterestCard
+    header="🌍 Web"
+    body="Internet fascinates me. It's like a virtual world, in which everyone can have their own space."
+    badges={[
+      { text: "svelteKIT", variant: "blue" },
+      { text: "next.js", variant: "amber" },
+      { text: "cloud", variant: "green" },
+      { text: "astro", variant: "teal" },
+      { text: "wasm", variant: "teal" },
+    ]}
+  />
+
+  <InterestCard
+    header="🔓 Security"
+    body="Internet cannot be useful, without people and policies governing it. That's why I'm interested in cybersecurity."
+    badges={[
+      { text: "penetration testing", variant: "blue" },
+      { text: "ethical hacking", variant: "red" },
+      { text: "node.js security", variant: "green" },
+      { text: "browsers", variant: "purple" },
+      { text: "linux", variant: "red" },
+    ]}
+  />
+
+  <InterestCard
+    header="🧠 AI"
+    body="Automatisation is the goal of the software - that's why AI / ML is it's natural next step."
+    badges={[
+      { text: "prompt engineering", variant: "blue" },
+      { text: "agents", variant: "red" },
+      { text: "LLM", variant: "green" },
+      { text: "machine learning", variant: "purple" },
+      { text: "vector databases", variant: "amber" },
+    ]}
+  />
+
+  <InterestCard
+    header="🎮 Game development"
+    body="I love playing and creating games. It's one of the most engaging form of art."
+    badges={[
+      { text: "godot", variant: "blue" },
+      { text: "13kjs", variant: "red" },
+      { text: "rpg", variant: "green" },
+      { text: "story telling", variant: "purple" },
+      { text: "online", variant: "purple" },
+    ]}
+  />
+</div>

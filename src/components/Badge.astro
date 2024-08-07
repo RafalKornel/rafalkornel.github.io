@@ -1,0 +1,53 @@
+---
+import { cn } from "@lib/utils";
+
+const colors = {
+  blue: { bg: "blue", text: "white" },
+  red: { bg: "red", text: "white" },
+  green: { bg: "green", text: "white" },
+  amber: { bg: "amber", text: "black" },
+  pink: { bg: "pink", text: "white" },
+  indigo: { bg: "indigo", text: "white" },
+  purple: { bg: "purple", text: "white" },
+  teal: { bg: "teal", text: "white" },
+  cyan: { bg: "cyan", text: "white" },
+} as const;
+
+type Variant = keyof typeof colors;
+const variants = Object.keys(colors) as Variant[];
+
+export interface Props {
+  variant: Variant;
+  text: string;
+  emoji?: string;
+}
+
+const { variant, text, emoji } = Astro.props;
+---
+
+<!-- I use this for loading color, I think tailwind
+is too stupid to dynamically infer colors. -->
+<div
+  class={cn(
+    "bg-green-500",
+    "bg-amber-500",
+    "bg-red-500",
+    "bg-blue-500",
+    "bg-pink-500",
+    "bg-purple-500",
+    "bg-teal-500",
+    "bg-indigo-500",
+    "bg-cyan-500",
+    "hidden"
+  )}
+>
+</div>
+
+<div
+  class={cn(
+    `bg-${variant}-500`,
+    "relative grid select-none items-center whitespace-nowrap rounded-lg  py-1.5 px-3 font-sans text-xs font-bold uppercase text-white"
+  )}
+>
+  <span class="">{emoji} {text}</span>
+</div>

@@ -1,0 +1,109 @@
+---
+import { SITE, isFeatureEnabled } from "@config";
+import { cn } from "@lib/utils";
+
+import Container from "@components/Container.astro";
+import HeaderLinks from "./HeaderLinks.astro";
+
+const { pathname } = Astro.url;
+const subpath = pathname.match(/[^/]+/g);
+
+const baseButtonClasses = cn(
+  "size-9 rounded-full p-2 items-center justify-center",
+  "bg-transparent hover:bg-main/5 dark:hover:bg-white/20",
+  "stroke-current hover:stroke-black hover:dark:stroke-white",
+  "transition-colors duration-300 ease-in-out"
+);
+---
+
+<header id="header" class="fixed top-0 w-full h-16 z-50">
+  <Container size="md">
+    <div class="relative h-full w-full">
+      <div
+        class="absolute left-0 top-1/2 -translate-y-1/2 flex gap-1 font-semibold"
+      >
+        <a href="/" class="flex align-middle gap-2 h-6">
+          <div class="my-auto text-lg leading-none text-accent font-bold">
+            <span transition:name="name">
+              {SITE.TITLE}
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <HeaderLinks />
+      </div>
+
+      <div class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
+        {
+          isFeatureEnabled("search") && (
+            <a
+              href="/search"
+              aria-label={`Search blog posts and projects on ${SITE.TITLE}`}
+              class={cn(
+                baseButtonClasses,
+                "hidden md:flex",
+                pathname === "/search" || "/" + subpath?.[0] === "/search"
+                  ? "pointer-events-none bg-main dark:bg-accent text-white dark:text-black"
+                  : ""
+              )}
+            >
+              <svg class="size-full">
+                <use href="/ui.svg#search" />
+              </svg>
+            </a>
+          )
+        }
+
+        <button
+          id="header-drawer-button"
+          aria-label={`Toggle drawer open and closed`}
+          class={cn(baseButtonClasses, "flex md:hidden")}
+        >
+          <svg id="drawer-open" class="size-full">
+            <use href="/ui.svg#menu"></use>
+          </svg>
+          <svg id="drawer-close" class="size-full">
+            <use href="/ui.svg#x"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </Container>
+</header>
+
+<style>
+  #header-drawer-button > #drawer-open {
+    @apply block;
+  }
+
+  #header-drawer-button > #drawer-close {
+    @apply hidden;
+  }
+
+  #header-drawer-button.open > #drawer-open {
+    @apply hidden;
+  }
+
+  #header-drawer-button.open > #drawer-close {
+    @apply block;
+  }
+</style>
+
+<script is:inline>
+function toggleDrawer() {
+  const drawer = document.getElementById("drawer");
+  const drawerButton = document.getElementById("header-drawer-button");
+  drawer?.classList.toggle("open");
+  drawerButton?.classList.toggle("open");
+}
+
+function initializeDrawerButton() {
+  const drawerButton = document.getElementById("header-drawer-button");
+  drawerButton?.addEventListener("click", toggleDrawer);
+}
+
+document.addEventListener("astro:after-swap", initializeDrawerButton);
+initializeDrawerButton();
+</script>

@@ -1,0 +1,25 @@
+---
+import type { Props as BadgeProps } from "./Badge.astro";
+import Badge from "./Badge.astro";
+
+interface Props {
+  header: string;
+  body: string;
+  badges: Array<BadgeProps>;
+}
+const { badges, body, header } = Astro.props;
+---
+
+<div class="block rounded-xl border border-secondary p-4">
+  <h2 class="mt-2 font-semibold text-base sm:text-lg text-white">
+    {header}
+  </h2>
+
+  <p class="sm:mt-1 block text-sm sm:text-base text-gray-300">
+    {body}
+  </p>
+
+  <div class="flex gap-2 flex-wrap">
+    {badges.map((props) => <Badge {...props} />)}
+  </div>
+</div>
