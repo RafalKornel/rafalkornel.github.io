@@ -14,7 +14,6 @@ const colors = {
 } as const;
 
 type Variant = keyof typeof colors;
-const variants = Object.keys(colors) as Variant[];
 
 export interface Props {
   variant: Variant;
@@ -27,7 +26,7 @@ const { variant, text, emoji } = Astro.props;
 
 <!-- I use this for loading color, I think tailwind
 is too stupid to dynamically infer colors. -->
-<div
+<!-- <div
   class={cn(
     "bg-green-500",
     "bg-amber-500",
@@ -41,7 +40,7 @@ is too stupid to dynamically infer colors. -->
     "hidden"
   )}
 >
-</div>
+</div> -->
 
 <div
   class={cn(

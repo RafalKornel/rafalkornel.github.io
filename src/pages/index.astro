@@ -2,47 +2,24 @@
 import { getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import ArrowCard from "@components/ArrowCard";
-import StackCard from "@components/StackCard.astro";
 import { SITE, isFeatureEnabled } from "@config";
 import TwinklingStars from "@components/Visual/TwinklingStars.astro";
 import MeteorShower from "@components/Visual/MeteorShower.astro";
 import Crescent from "@components/Visual/Crescent.astro";
 import Hero from "@components/Hero.astro";
 import Interests from "@components/Interests.astro";
-import Container from "@components/Container.astro";
 
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 
-const projects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3);
-
-const stack = [
-  {
-    text: "Astro",
-    icon: "astro",
-    href: "https://astro.build",
-  },
-  {
-    text: "Javascript",
-    icon: "javascript",
-    href: "https://www.javascript.com",
-  },
-  {
-    text: "Typescript",
-    icon: "typescript",
-    href: "https://www.typescriptlang.org",
-  },
-  {
-    text: "Tailwind",
-    icon: "tailwind",
-    href: "https://tailwindcss.com",
-  },
-];
+const projects = isFeatureEnabled("projects")
+  ? (await getCollection("projects"))
+      .filter((project) => !project.data.draft)
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+      .slice(0, 3)
+  : [];
 ---
 
 <PageLayout title="Home" description={SITE.DESCRIPTION}>
@@ -82,7 +59,7 @@ const stack = [
   </section>
 
   <div class="relative bg-white dark:bg-main">
-    <div class="mx-auto max-w-screen-sm p-5 space-y-24 pb-16">
+    <div class="mx-auto max-w-screen-sm p-5 space-y-4 md:space-y-12 pb-16">
       <section class="animate">
         <article class="text-xl text-black dark:text-white">
           <h3 class="text-2xl font-bold text-black dark:text-white">
@@ -108,7 +85,7 @@ const stack = [
             I am always interested in new
             <span class="text-accent">technologies</span>. In the field of
             technology, I see
-            <span class="text-accent">no bariers</span>.
+            <span class="text-accent">no barriers</span>.
           </p>
         </article>
       </section>
@@ -116,7 +93,7 @@ const stack = [
       <section class="animate">
         <article>
           <h3 class="text-2xl font-bold text-black dark:text-white">
-            My interests
+            My skills and interests
           </h3>
 
           <Interests />

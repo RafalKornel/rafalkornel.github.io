@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import { createComputed, createEffect, createSignal, For } from "solid-js";
+import { createEffect, createSignal, For } from "solid-js";
 import ArrowCard from "@components/ArrowCard";
 import Tag from "@components/Tag.tsx";
 
@@ -36,28 +36,23 @@ export default function Blog({ data, tags }: Props) {
   return (
     <div class="flex flex-col gap-4">
       <div class="col-span-3 sm:col-span-1">
-        <div class="">
-          <div class="text-sm font-semibold uppercase mb-2 text-black dark:text-white">
-            Tags
-          </div>
-
-          <div class="flex gap-2">
-            <For each={tags}>
-              {(tag) => (
-                <Tag
-                  isActive={() => filter().has(tag)}
-                  text={tag}
-                  onClick={() => toggleTag(tag)}
-                />
-              )}
-            </For>
-          </div>
+        <div class="flex gap-2">
+          <div class="text-lg">Tags:</div>
+          <For each={tags}>
+            {(tag) => (
+              <Tag
+                isActive={() => filter().has(tag)}
+                text={tag}
+                onClick={() => toggleTag(tag)}
+              />
+            )}
+          </For>
         </div>
       </div>
 
       <div class="col-span-3 sm:col-span-2">
         <div class="flex flex-col">
-          <div class="text-sm uppercase mb-2">
+          <div class="text-xs uppercase mb-2">
             SHOWING {posts().length} OF {data.length} POSTS
           </div>
 
