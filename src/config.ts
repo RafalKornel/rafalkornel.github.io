@@ -23,7 +23,7 @@ export function isFeatureEnabled(feature: Features) {
 
 // Global
 export const SITE: Site = {
-  TITLE: "Rafał Kornel - Personal Website",
+  TITLE: "Rafał Kornel",
   DESCRIPTION:
     "Welcome to my website! I am a software developer, specialising in frontend, backend, fullstack, AI, ML, web and others!",
   AUTHOR: "Rafał Kornel",
