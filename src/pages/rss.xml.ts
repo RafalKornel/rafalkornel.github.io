@@ -1,30 +1,33 @@
-// import rss from "@astrojs/rss"
-// import { getCollection } from "astro:content"
-// import { SITE } from "@config"
+import rss from "@astrojs/rss";
+import { getCollection } from "astro:content";
+import { SITE, isFeatureEnabled } from "@config";
 
-// type Context = {
-//   site: string
-// }
+type Context = {
+  site: string;
+};
 
-// export async function GET(context: Context) {
-// 	const posts = await getCollection("blog")
-//   const projects = await getCollection("projects")
+export async function GET(context: Context) {
+  if (!isFeatureEnabled("RSS")) {
+    return new Response("RSS is not supported.");
+  }
 
-//   const items = [...posts, ...projects]
+  const posts = await getCollection("blog");
 
-//   items.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  const items = [...posts];
 
-//   return rss({
-//     title: SITE.TITLE,
-//     description: SITE.DESCRIPTION,
-//     site: context.site,
-//     items: items.map((item) => ({
-//       title: item.data.title,
-//       description: item.data.summary,
-//       pubDate: item.data.date,
-//       link: item.slug.startsWith("blog")
-//         ? `/blog/${item.slug}/`
-//         : `/projects/${item.slug}/`,
-//     })),
-//   })
-// }
+  items.sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  );
+
+  return rss({
+    title: SITE.TITLE,
+    description: SITE.DESCRIPTION,
+    site: context.site,
+    items: items.map((item) => ({
+      title: item.data.title,
+      description: item.data.summary,
+      pubDate: item.data.date,
+      link: `/blog/${item.slug}/`,
+    })),
+  });
+}

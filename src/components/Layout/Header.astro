@@ -37,6 +37,21 @@ const baseButtonClasses = cn(
 
       <div class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
         {
+          isFeatureEnabled("RSS") && (
+            <a
+              href="/rss.xml"
+              target="_blank"
+              aria-label={`Rss feed for ${SITE.TITLE}`}
+              class={cn(baseButtonClasses, "hidden md:flex")}
+            >
+              <svg class="size-full">
+                <use href="/ui.svg#rss" />
+              </svg>
+            </a>
+          )
+        }
+
+        {
           isFeatureEnabled("search") && (
             <a
               href="/search"

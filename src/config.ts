@@ -1,6 +1,8 @@
 import type { Site, Page, Links, Socials } from "@types";
 
 const FEATURES_CONFIG = {
+  RSS: true,
+
   work: false,
   projects: false,
 
@@ -21,7 +23,7 @@ export function isFeatureEnabled(feature: Features) {
 
 // Global
 export const SITE: Site = {
-  TITLE: "Rafał Kornel",
+  TITLE: "Rafał Kornel - Personal Website",
   DESCRIPTION:
     "Welcome to my website! I am a software developer, specialising in frontend, backend, fullstack, AI, ML, web and others!",
   AUTHOR: "Rafał Kornel",

@@ -36,6 +36,21 @@ const baseLinkClass = cn(
 
   <div class="flex gap-1 mt-5">
     {
+      isFeatureEnabled("RSS") && (
+        <a
+          href="/rss.xml"
+          target="_blank"
+          aria-label={`Rss feed for ${SITE.TITLE}`}
+          class={cn(baseLinkClass)}
+        >
+          <svg class="size-full">
+            <use href="/ui.svg#rss" />
+          </svg>
+        </a>
+      )
+    }
+
+    {
       isFeatureEnabled("search") && (
         <a
           href="/search"
