@@ -1,7 +1,7 @@
 import type { CollectionEntry } from "astro:content";
 import { createEffect, createSignal, For } from "solid-js";
 import ArrowCard from "@components/ArrowCard";
-import Tag from "@components/Tag.tsx";
+import Tag from "./Tag";
 
 type Props = {
   tags: string[];
@@ -36,7 +36,7 @@ export default function Blog({ data, tags }: Props) {
   return (
     <div class="flex flex-col gap-4">
       <div class="col-span-3 sm:col-span-1">
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap">
           <div class="text-lg">Tags:</div>
           <For each={tags}>
             {(tag) => (

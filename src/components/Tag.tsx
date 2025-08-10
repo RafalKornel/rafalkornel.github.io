@@ -13,7 +13,7 @@ function Tag({ isActive, text, onClick }: Props) {
       class={cn(
         isActive() ? "bg-accent" : "bg-secondary",
         isActive() ? "text-main" : "text-white",
-        "relative grid select-none items-center whitespace-nowrap rounded-lg  py-1.5 px-3 font-sans text-xs font-bold uppercase"
+        "relative select-none items-center whitespace-nowrap rounded-lg  py-1.5 px-3 font-sans text-xs font-bold uppercase"
       )}
     >
       <span class="">{text}</span>
