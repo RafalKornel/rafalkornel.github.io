@@ -1,6 +1,6 @@
 ---
 title: "Advent of Code 2024 - Day 2"
-summary: "Safe and unsafe levels:  searching for O(n) solution"
+summary: "Safe and unsafe levels: searching for O(n) solution"
 date: "Aug 11 2025"
 draft: false
 tags:
@@ -10,14 +10,13 @@ tags:
 - Python
 ---
 
-## Input - levels 
-So in this puzzle we are presented with a level - simple concept, that basically mean an array of numbers.
-We also get two rules, that determine if the level is safe or not.
-Level is safe, if it follows both of those rules:
-- all numbers in a level are either *increasing* or *decreasing* (level is monothonic)
-- two numbers in a level has to differ by *at least one*, and *at most three*
+## Input - Levels 
+In this puzzle, we are presented with a level — a simple concept that basically means an array of numbers.
+We also have two rules that determine if the level is safe:
+- All numbers in a level are either *increasing* or *decreasing* (i.e., the level is monotonic).
+- Two numbers in a level must differ by *at least one* and *at most three*.
 
-This is how the example input looks like:
+This is how the example input looks:
 ```
 7 6 4 2 1
 1 2 7 8 9
@@ -27,11 +26,10 @@ This is how the example input looks like:
 1 3 6 7 9
 ```
 
-As we see, the first level is safe, but the second is not (we have jump between 2 and 7 differ by 5, which is greater than 3 - failing the second rule).
+As we see, the first level is safe, but the second is not (the jump between 2 and 7 is 5, which is greater than 3—failing the second rule).
 
-
-## Level validation
-We can write this rules in simple code:
+## Level Validation
+We can write these rules in simple code:
 ``` python
 def validate_level(level: list[int]) -> bool:
     first = level[0]
@@ -59,13 +57,12 @@ def validate_level(level: list[int]) -> bool:
     return True, None
 ```
 
-This function, besides of checking if the level is safe, also returns the index of (first) number, that is not following the rules (this will come in handy for the second part of the puzzle).
+This function, in addition to checking if the level is safe, also returns the index of the first number that does not follow the rules (this will come in handy for the second part of the puzzle).
 
-This approach is simple, and we can also see only one loop. We only have to traverse the list once - this produces O(n * m) time complexity, where n is the number of levels, and m is average level length, and O(1) memory complexity (only few helper variables created).
+This approach is simple, and we can see that it traverses the list only once — resulting in O(n * m) time complexity, where n is the number of levels and m is the average level length, and O(1) memory complexity (only a few helper variables are created).
 
-## Part one
-So the first part of the puzzle is pretty straightforward - we have to iterate over each level, and determine if it's valid or not.
-
+## Part One
+The first part of the puzzle is straightforward — we have to iterate over each level and determine if it is valid.
 ``` python
 def solution_1(levels: list[list[int]]) -> tuple[list[bool], bool]:
     safe_count = len(levels)
@@ -82,14 +79,14 @@ def solution_1(levels: list[list[int]]) -> tuple[list[bool], bool]:
     return report_result, safe_count
 ```
 
-In this code, we also calculate which levels are safe. If we only focus on the number of safe levels, we achieve O(1) memory complexity, and O(n) time complexity. Neat!
+In this code, we also calculate which levels are safe. Focusing only on the number of safe levels gives O(1) memory complexity and O(n) time complexity. Neat!
 
-## Part two - the twist
-Now our goal is also to count the number of valid levels, but this time, we have additional rule, for level validation:
-- if by removing one number from the unsafe level it becomes safe - we consider it as safe
+## Part Two - The Twist
+Now, our goal is also to count the number of valid levels, but this time we have an additional rule for validation:
+- If by removing one number from an unsafe level it becomes safe, we consider that level safe.
 
-So the first idea that can come to mind is to remove each number one by one, and look if the unsafe level can be considered as safe.
-This approach would however increase our time complexity.
+The first idea is to remove each number one by one and check if the unsafe level becomes safe.
+This approach, however, increases our time complexity.
 
 Consider this solution:
 ``` python
@@ -114,11 +111,10 @@ def solution_2_bad(levels: list[list[int]]) -> tuple[list[bool], bool]:
     return report_result, safe_count
 ```
 
-Now the issue is that our function is O(n * m^2)! 
-We have to do (in worst case scenarion) m square operations!
+Now, the issue is that our function is O(n * m^2)! 
+In the worst-case scenario, we perform m squared operations!
 
-This is not the best we can do, so let's utilise the returned index of failed value.
-
+This is not the best we can do, so let's utilize the returned index of the failed value.
 ``` python
 def solution_2(levels: list[list[int]]) -> tuple[list[bool], bool]:
     safe_count = len(levels)
@@ -168,53 +164,53 @@ def solution_2(levels: list[list[int]]) -> tuple[list[bool], bool]:
     return report_result, safe_count
 ```
 
-It seems to be more verbose, but it's actually less computation heavy.
-In this solution, when we evaluate level as unsafe (initially), we also grab the index of value that has broken the rules.
-Then, we try to remove 3 values - one on the left of the fauly one, the actual faulty one, and one on the right. This is due to the fact, that the rule is applied to the pair of numbers, so when the number fails, we are certain, that it's closest neighbourhood is faulty.
+It seems to be more verbose, but it's actually less computationally heavy.
+In this solution, when we evaluate a level as unsafe, we also grab the index of the value that broke the rules.
+Then, we try to remove three values — one to the left of the faulty element, the faulty element itself, and one to the right. This is because the rule applies to pairs of numbers, so when a number fails, we can be sure that its closest neighbors are involved.
 
-This solution works, and is less computation heavy - now we have O(n * 3 * m) time complexity worst case scenario - that is when we have to remove left, center and the right element. But we don't have to perform second m-times loop!
+This solution works and is less computation heavy—now we have O(n * 3 * m) time complexity in the worst-case scenario (when we have to remove the left, center, and right elements). But we don't have to perform an additional m-times loop!
 
-## Extra - more (time) optimised solution
-I was satisfied with this solution, but I had gut feeling that it could be simpler. I knew that some properties of the system could be derived from the actuall difference of the two numbers - without having to manually check cases. 
+## Extra - More (Time) Optimised Solution
+I was satisfied with this solution, but I had a gut feeling that it could be simpler. I knew that some properties of the system could be derived from the actual differences between numbers—without having to manually check cases.
 
-Let's now look at the example:
+Let's look at the example:
 ```
 Level: [6, 6, 4, 2, 1]
 Diff: [0, 2, 2, 1]
 ```
 
-We can spot immediately, that 0 is a violation of our rules.
+We can immediately spot that 0 is a violation of our rules.
 
-Not let's consider this case:
+Now, consider this case:
 ```
 Level: [1, 2, 7, 3, 4]
 Diff: [-1, -5, 4, -1]
 ```
 
-We see that one of the elements has different sign, which violates our rules. But remember, the diff consists of two numbers. So which one should we remove?
+We see that one of the differences has a different sign, which violates our rules. But remember, the diff consists of two numbers. So, which one should we remove?
 
-We decide that by adding "bad" difference to one of it's neighbours.
+We decide that by adding the "bad" difference to one of its neighbors.
 
 We have two options:
 - -5 + 4 = -1
 - 4 + -1 = 3
 
-so if we go with collapsing it to -1, it's still wrong, but if we decide to collapse it to the left (-5) we land in the correct differences:
+So, if we collapse it to -1, it's still incorrect, but if we decide to collapse it to the left (-5), we obtain the correct differences:
 ```
 -1, -1, -1
 ```
 
-So which number should we remove?
-Look at this:
+So, which number should we remove?
+Consider:
 - -5 = 2 - 7 (second element minus third element)
 - 4 = 7 - 3 (third element minus fourth element)
 - -5 + 4 = (2 - 7) + (7 - 3) = 2 - 3
 
-So we naturally achieve the solution - we should remove 7!
+Thus, we naturally arrive at the solution—we should remove 7!
 
-So in this solution, we perform O(n * m) calculations, so we still have the same time complexity for the first puzzle. Memory complexity however, grew from O(1) to O(m) because now we have to store the differences.
+In this solution, we perform O(n * m) calculations, so we still have the same time complexity for the first puzzle. Memory complexity, however, grew from O(1) to O(m) because we now have to store the differences.
 
-So this problem has two optimal solutions (that I have found):
-- first (mine) is the time O(n * 3 * m) -> linear, and memory O(1) -> constant
-- second ([found by this reddit user](https://reddit.com/user/FriendshipSweet792)) is time O(n * m) -> linear and sligtly faster, memory O(m) -> linear
+So, this problem has two optimal solutions (that I have found):
+- First (mine) is O(n * 3 * m) (linear time and constant memory, O(1)).
+- Second ([found by this Reddit user](https://reddit.com/user/FriendshipSweet792)) is O(n * m) (linear time and slightly faster) with O(m) memory (linear).
 
