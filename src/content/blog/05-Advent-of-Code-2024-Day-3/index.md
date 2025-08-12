@@ -10,24 +10,27 @@ tags:
 - Python
 ---
 
-## Did AOC team invent new language?
-Not really. The input for today's puzzle (I mean day 3 of AOC, so like 03.12.2024 🤣) seems very similar to primitive, minified code - but it only have one syntaxt token defined (so far). 
-We are presented with something like this:
+## Did the AoC team invent a new language?
+
+Not really. The input for today's puzzle (Day 3 of AoC, i.e., 03.12.2024 🤣) looks a lot like primitive, minified code — but it has only one syntax token defined (so far). We get something like this:
+
 ```
 xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))
 ```
-In this code, we are interested in **mul(X,Y)** phrases. This represent the multiplication operation, between X and Y.
-So our goal is to parse this type of code, and then calculate the sum of all operation results.
+
+In this code, we are interested in **mul(X,Y)** phrases. These represent multiplication operations between X and Y. Our goal is to parse this code and calculate the sum of all multiplication results.
 
 ## State machines FTW
-For this type of tasks, state machines are a quite good fit. But what is a state machine?
-State machine is a structure, with states, and behaviour that models the state changes. Most commonly, the states are represented by the enum structure, sometimes by the string values.
 
-We will parse each character of the input, and change the state of the machine, based on our predefined rules.
+State machines are a great fit for this kind of problem. But what is a state machine?
 
-So let's define states, that we will use.
+A state machine is a structure with states and behavior that models state changes. Most commonly, states are represented by an `enum` or by string values.
 
-``` python
+We will parse each character of the input and change the state of the machine based on predefined rules.
+
+Here are the states we'll use:
+
+```python
 class ParserState(Enum):
     IDLE = "idle"
     OPERATION = "operation"
@@ -36,9 +39,16 @@ class ParserState(Enum):
     FAILED = "failed"
 ```
 
-**IDLE** is the default state, it means we did not start parsing the operation yet. **OPERATION** means we encountered the valid operation keyword, and are now parsing it. **PARAMETERS** means we are parsing the operation's arguments (or parameters). **READY** means we've parsed the operation, and **FAILED** means we did not succeed. This states will be used in two independent classes - `Parser` will be responsible for iterating over characters, and determining IDLE and OPERATION states, whereas PARAMTERS, READY and FAILED will be used in `Operation` parser - this is specific parser for the parameters of the operations. For now we only have one operation defined - `mul` (meaning multiplication).
+- **IDLE**: The default state; we haven't started parsing an operation.
+- **OPERATION**: We've encountered a valid operation keyword and are parsing it.
+- **PARAMETERS**: We're parsing the operation's arguments.
+- **READY**: The operation has been successfully parsed.
+- **FAILED**: Parsing failed.
 
-We have to define some utilities. First, `Operation` abstract class:
+These states will be used in two independent classes: `Parser` (for identifying operations) and `Operation` (for parsing parameters). For now, we only have one operation: `mul`.
+
+### Operation class
+
 ```python
 class Operation(ABC):
     type: str = NotImplemented
@@ -57,34 +67,30 @@ class Operation(ABC):
             return self
 ```
 
-This is basic data structure, that will hold information about the status of parsing operation's inputs (arguments / parameters), and also the operation type itself.
+This basic structure holds the parsing state, the operation type, and any parsed arguments.
 
 ## Parser
 
-Having that, we can define somewhat abstract `Parser` class:
-``` python
+Here's our abstract `Parser` class:
+
+```python
 class Parser:
     stack: list[str] = []
     operation: Operation | None = None
     state: ParserState = ParserState.IDLE
-
     debug: bool = False
-
     operations: list[Operation] = []
 
     def __init__(self, operations: list[Operation], debug=False):
         self.operations = operations
         self.debug = debug
-        pass
 
     def restart(self):
         if self.debug:
             print()
-
         self.state = ParserState.IDLE
         self.stack.clear()
         self.operation = None
-
         return self
 
     def __repr__(self):
@@ -96,33 +102,25 @@ class Parser:
 
         if self.state == ParserState.IDLE:
             self.stack.append(char)
-
             if char != "(":
                 return
 
             for operation in self.operations:
                 length = len(operation.type)
-
                 phrase = "".join(self.stack[-length - 1 : -1 :])
-
                 if phrase == operation.type:
                     self.restart()
                     self.state = ParserState.OPERATION
                     self.operation = operation()
-
                     return
 
         elif self.state == ParserState.OPERATION:
             if not self.operation:
                 return
-
             res = self.operation.consume(char)
-
             if not res:
                 return
-
             self.restart()
-
             if res.state == ParserState.READY:
                 return res
 ```
@@ -147,19 +145,18 @@ for c in inp:
         pass
 ```
 
-This structure allow us to define operations independently, define how we parse it's arguments (we can implement parsing arbitrary parameters, numbers, strings, n, infinite etc.). This flexibility will come in handy in the second part of the puzzle (and maybe later in the AOC?)
+This structure lets us define operations independently and control how their arguments are parsed.
 
 The important note here is that we start parsing operation, when we encounter operation keyword, followed by the open parenthesis sign `(`. 
 Because of that, we have to perform slicing `[-length - 1 : -1 :]` on the current character stack.
 We start parsing `mul`, when we have `[..., m, u, l, (]` and go straight to the parameters parsing. This is arbitrary rule, that makes parsing our puzzle a bit simpler.
 
-## Mult operation
-So now let's focus on the `mul` operation.
 
-``` python
+## The `mul` operation
+
+```python
 class MultOperation(Operation):
     type = "mul"
-
     stack: list[str] = []
     state: ParserState = ParserState.PARAMETERS
 
@@ -169,7 +166,6 @@ class MultOperation(Operation):
     def restart(self):
         self.stack.clear()
         self.state = ParserState.FAILED
-
         return self
 
     def consume(self, char: str) -> Operation | None:
@@ -186,7 +182,6 @@ class MultOperation(Operation):
             number_as_str = int("".join(self.stack))
             self.args.append(number_as_str)
             self.stack.clear()
-
             if len(self.args) == 2:
                 self.state = ParserState.READY
                 return self
@@ -196,11 +191,11 @@ class MultOperation(Operation):
             return self.restart()
 ```
 
-The `MultOperation` class inherits (or actually implements) the `Operation` abstract class, by defining the rules of parsing input. We store `args` array, so right here we can parse arbitraty number of the arguments. When we find delimeter (`,`), we flush the operation's `stack` into the `args` array, and continue parsing. When we encounter closing parenthesis sign `)`, we finish parsing, check if we have exactly two arguments, and return operation object with the data, and READY status.
+When we encounter a comma, we store the current number and continue parsing. When we see a closing parenthesis, we check if we have exactly two arguments; if so, the operation is ready.
 
-## Full solution
-Here is full solution for part 1:
-``` python
+## Full solution (Part 1)
+
+```python
 def solution_1(stream: str):
     total = 0
     parser = Parser(operations=[MultOperation], debug=False)
@@ -251,20 +246,19 @@ Because we've defined default behaviour in our abstract `Operation` class (defau
 class DoOperation(Operation):
     type = "do"
 
-
 class DontOperation(Operation):
     type = "don't"
 ```
 
-Our solution now looks like this:
-``` python
+Solution:
+
+```python
 def solution_2(stream: str):
     operations: list[Operation] = []
     parser = Parser(operations=[MultOperation, DoOperation, DontOperation], debug=False)
 
     for char in stream:
         res = parser.consume(char)
-
         if res is not None:
             operations.append(res)
 
@@ -290,14 +284,12 @@ Now we parse the input, and store operations on the side.
 Then we iterate over the operations, and use `is_enabled` toggle, to correctly calculate the sum. If we encounter `do` operation, we enable summing, if we encounter `don't`, we disable it. 
 
 ## Analysis of complexity (part 2)
-The core algorithm didn't change actually. We still have to parse input (so iterate over each character individually), so time complexity stays at O(n).
-
-The memory complexity of this approach is O(n), because in worst case scenario (only valid mul operations in a sequence), we would have n/8 operations (`mul` + `(` + X + `,` + Y + `)` -> that's 8 characters total).
+Time complexity remains **O(n)**, but memory usage is now **O(n)** since we store all parsed operations.
 
 ## Conclusion
-And that's it! We've successfully parsed the input (which in the puzzle terminology is called memory). This experience seems like parsing a programming language - very primitive one. We have c-like function invokations, and actually only handle three simple functions.
-Nonetheless, it was very interesting puzzle. Maybe in the next days we have to create actuall AST (abstract syntaxt tree)? 
+
+We've successfully parsed the input (or "memory" in puzzle terms) using a flexible state machine approach. It feels like writing a parser for a tiny programming language with C-like function calls. Maybe in the coming days we'll build a full AST (Abstract Syntax Tree)?
 
 We'll see.
 
-Thanks for reading, see you in the next article!
+Thanks for reading, and see you in the next article!
